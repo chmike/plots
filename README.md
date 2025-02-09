@@ -4,7 +4,7 @@ The plot package provides functions to create lines or spike plots.
 
 ## Installation
 
-To use this package execute `go get "github.com/chmikes/plots"` the terminal after you executed the `go mod init` instruction.
+To use this package execute `go get "github.com/chmike/plots"` the terminal after you executed the `go mod init` instruction.
 
 ## Line plots
 

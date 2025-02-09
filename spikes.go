@@ -21,6 +21,10 @@ type SpikeLines struct {
 
 }
 
+type Limit struct {
+	Min, Max float64 // Axis limit values.
+}
+
 // SpikeLine is a labeled sequence of spike event time values.
 // Requires that spike event times are sorted in increasing order.
 type SpikeLine struct {

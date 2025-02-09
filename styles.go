@@ -1,4 +1,4 @@
-package plot
+package plots
 
 import (
 	"image/color"

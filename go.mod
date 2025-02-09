@@ -1,4 +1,4 @@
-module github.com/chmikes/plot
+module github.com/chmikes/plots
 
 go 1.23.0
 

@@ -13,12 +13,11 @@ import (
 
 // SpikeLines is a plot of spikes lines drawn from top to bottom.
 type SpikeLines struct {
-	Title string      // Title
-	Lines []SpikeLine // Spike lines.
-	XMin  float64     // Minimum X value if not 0.
-	XMax  float64     // Maximum X value if not 0.
-	XDim  vg.Length   // X dimension of saved plot, use default if 0.
-	YDim  vg.Length   // Y dimension of saved plot, use default if 0.
+	Title  string      // Title
+	Lines  []SpikeLine // Spike lines.
+	XLimit *Limit      // Spike time range limit.
+	XDim   vg.Length   // X dimension of saved plot, use default if 0.
+	YDim   vg.Length   // Y dimension of saved plot, use default if 0.
 
 }
 
@@ -178,7 +177,7 @@ func MakeSpikePlot(spikeLines SpikeLines, fileNames ...string) error {
 	p := plot.New()
 	p.Title.Text = spikeLines.Title
 	p.X.Label.Text = "Time (s)"
-	if spikeLines.XMax == 0 {
+	if spikeLines.XLimit == nil {
 		xMin, xMax := math.Inf(1), math.Inf(-1)
 		for i := range spikeLines.Lines {
 			for _, v := range spikeLines.Lines[i].Spikes {
@@ -193,8 +192,8 @@ func MakeSpikePlot(spikeLines SpikeLines, fileNames ...string) error {
 		p.X.Min = xMin
 		p.X.Max = xMax
 	} else {
-		p.X.Min = spikeLines.XMin
-		p.X.Max = spikeLines.XMax
+		p.X.Min = spikeLines.XLimit.Min
+		p.X.Max = spikeLines.XLimit.Max
 	}
 	p.Y.Tick.Marker = spikeLines
 	p.Add(spikeLines)

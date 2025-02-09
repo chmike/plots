@@ -50,11 +50,17 @@ type Line struct {
 	GlyphRadius vg.Length        // Glyph size.
 }
 
+type Limit struct {
+	Min, Max float64 // Axis limit values.
+}
+
 // Lines is a set of lines to be drawn.
 type Lines struct {
 	Title  string    // Line plot title.
 	XLabel string    // X axis label, none if empty.
 	YLabel string    // Y axis label, none if empty.
+	XLimit *Limit    // XLimit values or nil if none.
+	YLimit *Limit    // YLimit values or nil if none.
 	Lines  []Line    // Lines to draw in plot.
 	XDim   vg.Length // X dimension of saved plot, use default if 0.
 	YDim   vg.Length // Y dimension of saved plot, use default if 0.
@@ -66,6 +72,14 @@ func MakeLinePlot(lines Lines, fileNames ...string) error {
 	p.Title.Text = lines.Title
 	p.X.Label.Text = lines.XLabel
 	p.Y.Label.Text = lines.YLabel
+	if lines.XLimit != nil {
+		p.X.Min = lines.XLimit.Min
+		p.X.Max = lines.XLimit.Max
+	}
+	if lines.YLimit != nil {
+		p.Y.Min = lines.YLimit.Min
+		p.Y.Max = lines.YLimit.Max
+	}
 	for i := range lines.Lines {
 		err := Add(p, lines.Lines[i])
 		if err != nil {

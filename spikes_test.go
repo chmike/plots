@@ -173,13 +173,14 @@ func TestManySpikeLines(t *testing.T) {
 		},
 	})
 	spikes.Title = "Poisson distributed spikes"
+	spikes.XDim = 19 * vg.Centimeter
+	spikes.YDim = 12 * vg.Centimeter
 
 	err := MakeSpikePlot(spikes, "tests/poissonSpikePlot.png", "tests/poissonSpikePlot.svg")
 	if err != nil {
 		t.Fatalf("failed saving image: %s", err)
 	}
-	spikes.XMin = 1
-	spikes.XMax = duration / 2
+	spikes.XLimit = &Limit{Min: 1, Max: duration / 2}
 
 	err = MakeSpikePlot(spikes, "tests/poissonSpikeSubPlot.png", "tests/poissonSpikeSubPlot.svg")
 	if err != nil {

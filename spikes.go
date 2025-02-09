@@ -3,6 +3,7 @@ package plots
 import (
 	"fmt"
 	"image/color"
+	"math"
 	"sort"
 
 	"gonum.org/v1/plot"
@@ -14,6 +15,8 @@ import (
 type SpikeLines struct {
 	Title string      // Title
 	Lines []SpikeLine // Spike lines.
+	XMin  float64     // Minimum X value if not 0.
+	XMax  float64     // Maximum X value if not 0.
 	XDim  vg.Length   // X dimension of saved plot, use default if 0.
 	YDim  vg.Length   // Y dimension of saved plot, use default if 0.
 
@@ -167,15 +170,32 @@ func (s SpikeLines) Ticks(min, max float64) []plot.Tick {
 }
 
 // MakeSpikePlot generates the spike plot for a given time range.
-func MakeSpikePlot(spikeLines SpikeLines, xMin, xMax float64, fileNames ...string) error {
+func MakeSpikePlot(spikeLines SpikeLines, fileNames ...string) error {
 	if len(fileNames) == 0 {
 		return nil
 	}
+
 	p := plot.New()
 	p.Title.Text = spikeLines.Title
 	p.X.Label.Text = "Time (s)"
-	p.X.Min = xMin
-	p.X.Max = xMax
+	if spikeLines.XMax == 0 {
+		xMin, xMax := math.Inf(1), math.Inf(-1)
+		for i := range spikeLines.Lines {
+			for _, v := range spikeLines.Lines[i].Spikes {
+				if v < xMin {
+					xMin = v
+				}
+				if v > xMax {
+					xMax = v
+				}
+			}
+		}
+		p.X.Min = xMin
+		p.X.Max = xMax
+	} else {
+		p.X.Min = spikeLines.XMin
+		p.X.Max = spikeLines.XMax
+	}
 	p.Y.Tick.Marker = spikeLines
 	p.Add(spikeLines)
 	xDim, yDim := spikeLines.XDim, spikeLines.YDim

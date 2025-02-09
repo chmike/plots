@@ -56,7 +56,7 @@ func TestSpikePlot(t *testing.T) {
 		},
 	}
 	os.MkdirAll("tests", 0766)
-	err := MakeSpikePlot(spikes, 0, 10, "tests/simpleSpikePlot.png", "tests/simpleSpikePlot.svg")
+	err := MakeSpikePlot(spikes, "tests/simpleSpikePlot.png", "tests/simpleSpikePlot.svg")
 	if err != nil {
 		t.Fatalf("failed saving image: %s", err)
 	}
@@ -174,12 +174,14 @@ func TestManySpikeLines(t *testing.T) {
 	})
 	spikes.Title = "Poisson distributed spikes"
 
-	err := MakeSpikePlot(spikes, 0, duration, "tests/poissonSpikePlot.png", "tests/poissonSpikePlot.svg")
+	err := MakeSpikePlot(spikes, "tests/poissonSpikePlot.png", "tests/poissonSpikePlot.svg")
 	if err != nil {
 		t.Fatalf("failed saving image: %s", err)
 	}
+	spikes.XMin = 1
+	spikes.XMax = duration / 2
 
-	err = MakeSpikePlot(spikes, 1., duration/2., "tests/poissonSpikeSubPlot.png", "tests/poissonSpikeSubPlot.svg")
+	err = MakeSpikePlot(spikes, "tests/poissonSpikeSubPlot.png", "tests/poissonSpikeSubPlot.svg")
 	if err != nil {
 		t.Fatalf("failed saving image: %s", err)
 	}
